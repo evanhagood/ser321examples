@@ -251,8 +251,21 @@ class WebServer {
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
-          String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-          System.out.println(json);
+          try {
+            String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
+          } catch(FileNotFoundException ex) {
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("The provided query is incorrect. Please fix your link for the GitHub API");
+          } catch(Exception ex) {
+            builder.append("HTTP/1.1 500 Internal Server Error\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("An unknown error occurred. Please make sure your GitHub URL is correct.");
+            ex.printStackTrace();
+          }
+          //System.out.println(json);
 
           builder.append("HTTP/1.1 200 OK\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
@@ -358,11 +371,16 @@ class WebServer {
    * @return the String result of the http request.
    *
    **/
-  public String fetchURL(String aUrl) {
+  public String fetchURL(String aUrl) throws Exception {
     StringBuilder sb = new StringBuilder();
     URLConnection conn = null;
     InputStreamReader in = null;
-    try {
+    /*
+     * Changing this so that I can handle the excpetions under the if(github?) section of the code
+     * That's the only place this code is used anyway. I will handle it all there so I can deal with
+     * the server not crashing
+     */
+    // where old try block was
       URL url = new URL(aUrl);
       conn = url.openConnection();
       if (conn != null)
@@ -379,11 +397,8 @@ class WebServer {
           br.close();
         }
       }
+      // where old catch block was
       in.close();
-    } catch (Exception ex) {
-      System.out.println("Exception in url request:" + ex.getMessage());
-      ex.printStackTrace();
-    }
     return sb.toString();
   }
 }
