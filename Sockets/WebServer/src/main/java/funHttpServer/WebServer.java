@@ -264,6 +264,7 @@ class WebServer {
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("The provided query is incorrect. Please fix your link for the GitHub API");
+            ex.printStackTrace();
           } catch(Exception ex) {
             builder.append("HTTP/1.1 500 Internal Server Error\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
