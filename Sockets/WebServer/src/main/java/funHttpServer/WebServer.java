@@ -215,11 +215,12 @@ class WebServer {
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("Result is: " + result);
+            // this method will still overflow if the passed integers multiply to something > Integer.MAX_VALUE
           } catch(NumberFormatException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("Honestly idk what to put here yet.");
+            builder.append("Please ensure passed parameters are valid Java integers.");
           } catch(StringIndexOutOfBoundsException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
