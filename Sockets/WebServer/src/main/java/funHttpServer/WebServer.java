@@ -216,21 +216,25 @@ class WebServer {
             builder.append("\n");
             builder.append("Result is: " + result);
             // this method will still overflow if the passed integers multiply to something > Integer.MAX_VALUE
+            // I'm not gonna change the code to use something like BigInteger, though that's probably what I'd do if this were
+            // a real server.
           } catch(NumberFormatException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("Please ensure passed parameters are valid Java integers.");
+            builder.append("Please ensure passed parameters are valid integers.");
           } catch(StringIndexOutOfBoundsException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("Please enter two parameters for multiply.");
           } catch(Exception ex) {
-            builder.append("HTTP/1.1 400 Bad Request\n");
+            // This could be executed by a client error, but since I'm catching Exception,
+            // I'll respond with 500 since this could also be a server error. Client can make sure their usage is correct.
+            builder.append("HTTP/1.1 500 Internal Server Error\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("Parameters given are not correct");
+            builder.append("An unexpected error occured. Usage: /multiply?num1=<num1>&num2=<num2>");
           }
 
           // TODO: Include error handling here with a correct error code and
