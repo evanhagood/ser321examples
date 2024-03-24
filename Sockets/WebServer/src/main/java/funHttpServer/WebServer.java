@@ -253,6 +253,12 @@ class WebServer {
           query_pairs = splitQuery(request.replace("github?", ""));
           try {
             String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
+
+            // only append the OK request if its ok (aka no exception was thrown above):
+            builder.append("HTTP/1.1 200 OK\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Check the todos mentioned in the Java source file");
           } catch(FileNotFoundException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
@@ -265,12 +271,6 @@ class WebServer {
             builder.append("An unknown error occurred. Please make sure your GitHub URL is correct.");
             ex.printStackTrace();
           }
-          //System.out.println(json);
-
-          builder.append("HTTP/1.1 200 OK\n");
-          builder.append("Content-Type: text/html; charset=utf-8\n");
-          builder.append("\n");
-          builder.append("Check the todos mentioned in the Java source file");
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
 
