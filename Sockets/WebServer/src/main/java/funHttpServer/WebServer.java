@@ -264,7 +264,8 @@ class WebServer {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("The provided query is incorrect. Please fix your link for the GitHub API");
+            builder.append("The provided query is incorrect. Please fix your link for the GitHub API\n");
+            builder.append("Usage: /github?query=<query>\n");
             ex.printStackTrace();
           } catch(Exception ex) {
             System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
