@@ -253,7 +253,6 @@ class WebServer {
           query_pairs = splitQuery(request.replace("github?", ""));
           try {
             String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-            System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
 
             // only append the OK request if its ok (aka no exception was thrown above):
             builder.append("HTTP/1.1 200 OK\n");
@@ -261,12 +260,14 @@ class WebServer {
             builder.append("\n");
             builder.append("Check the todos mentioned in the Java source file");
           } catch(FileNotFoundException ex) {
+            System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("The provided query is incorrect. Please fix your link for the GitHub API");
             ex.printStackTrace();
           } catch(Exception ex) {
+            System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
             builder.append("HTTP/1.1 500 Internal Server Error\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
