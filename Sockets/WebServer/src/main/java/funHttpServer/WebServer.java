@@ -253,6 +253,7 @@ class WebServer {
           query_pairs = splitQuery(request.replace("github?", ""));
           try {
             String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
+            System.out.println(json);
 
             // only append the OK request if its ok (aka no exception was thrown above):
             builder.append("HTTP/1.1 200 OK\n");
@@ -264,8 +265,7 @@ class WebServer {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("The provided query is incorrect. Please fix your link for the GitHub API\n");
-            builder.append("Usage: /github?query=<query>\n");
+            builder.append("The provided query is incorrect. Usage: /github?query=<query>\n");
             ex.printStackTrace();
           } catch(Exception ex) {
             System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
@@ -277,6 +277,7 @@ class WebServer {
           }
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
+          //JSONObject obj = new JSONObject();
 
         } else {
           // if the request is not recognized at all
