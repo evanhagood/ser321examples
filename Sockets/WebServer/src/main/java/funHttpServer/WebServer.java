@@ -291,7 +291,7 @@ class WebServer {
               StringBuilder payload = new StringBuilder();
               payload
                   .append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
-              payload.append("<h1>Repository Details</h1>\n<ul>\n");
+              payload.append("<h1>Repository Details</h1>\n<ul>\n<ul>");
 
               for (int i = 0; i < arr.length(); i++) {
                 JSONObject repo = arr.getJSONObject(i);
@@ -312,10 +312,10 @@ class WebServer {
               // send data to client
               builder.append("HTTP/1.1 200 OK\n");
               builder.append("Content-Type: text/html; charset=utf-8\n\n");
-              builder.append(payload + "\n");
+              builder.append(payload + "</ul>");
             } catch (NullPointerException ex) {
               // bad coding practice here, maybe
-              // we don't really need to do anything since if json is null, one of those
+              // we don't really need to do anything if json is null, one of those
               // catch blocks would have aleady sent the HTTP packet with some error code
               // just making sure the program doesn't crash because of it
               ex.printStackTrace();
@@ -326,7 +326,7 @@ class WebServer {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("Only supported JSON parsing is through queries that return arrays.");
+            builder.append("Only supported JSON parsing is through API requests that return arrays.");
           }
 
         } else {
