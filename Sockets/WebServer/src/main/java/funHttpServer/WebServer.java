@@ -276,7 +276,7 @@ class WebServer {
           try {
             // read the JSON file
             JSONArray arr = new JSONArray(json);
-            //System.out.println(arr);
+            System.out.println(arr);
             // Start the payload of the sent HTTP packet
             StringBuilder payload = new StringBuilder();
             payload.append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
@@ -284,7 +284,7 @@ class WebServer {
 
             for(int i = 0; i < arr.length(); i++) {
               JSONObject repo = arr.getJSONObject(i);
-              System.out.println(repo);
+              //System.out.println(repo);
               String fullName = repo.getString("full_name");
               int id = repo.getInt("id");
               String login = repo.getJSONObject("owner").getString("full_name");
