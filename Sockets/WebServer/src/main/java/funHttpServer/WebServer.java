@@ -34,6 +34,7 @@ class WebServer {
 
   /**
    * Main thread
+   * 
    * @param port to listen on
    */
   public WebServer(int port) {
@@ -83,6 +84,7 @@ class WebServer {
 
   /**
    * Reads in socket stream and generates a response
+   * 
    * @param inStream HTTP input stream from socket
    * @return the byte encoded HTTP response
    */
@@ -187,7 +189,8 @@ class WebServer {
             builder.append("HTTP/1.1 200 OK\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
-            builder.append("Would theoretically be a file but removed this part, you do not have to do anything with it for the assignment");
+            builder.append(
+                "Would theoretically be a file but removed this part, you do not have to do anything with it for the assignment");
           } else { // failure
             builder.append("HTTP/1.1 404 Not Found\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
@@ -216,22 +219,25 @@ class WebServer {
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("Result is: " + result);
-            // this method will still overflow if the passed integers multiply to something > Integer.MAX_VALUE
-            // I'm not gonna change the code to use something like BigInteger, though that's probably what I'd do if this were
+            // this method will still overflow if the passed integers multiply to something
+            // > Integer.MAX_VALUE
+            // I'm not gonna change the code to use something like BigInteger, though that's
+            // probably what I'd do if this were
             // a real server.
-          } catch(NumberFormatException ex) {
+          } catch (NumberFormatException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("Please ensure passed parameters are valid integers.");
-          } catch(StringIndexOutOfBoundsException ex) {
+          } catch (StringIndexOutOfBoundsException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("Please enter two parameters for multiply.");
-          } catch(Exception ex) {
+          } catch (Exception ex) {
             // This could be executed by a client error, but since I'm catching Exception,
-            // I'll respond with 500 since this could also be a server error. Client can make sure their usage is correct.
+            // I'll respond with 500 since this could also be a server error. Client can
+            // make sure their usage is correct.
             builder.append("HTTP/1.1 500 Internal Server Error\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
@@ -246,25 +252,28 @@ class WebServer {
           // check out https://docs.github.com/rest/reference/
           //
           // HINT: REST is organized by nesting topics. Figure out the biggest one first,
-          //     then drill down to what you care about
-          // "Owner's repo is named RepoName. Example: find RepoName's contributors" translates to
-          //     "/repos/OWNERNAME/REPONAME/contributors"
+          // then drill down to what you care about
+          // "Owner's repo is named RepoName. Example: find RepoName's contributors"
+          // translates to
+          // "/repos/OWNERNAME/REPONAME/contributors"
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
           String json = null;
           try {
             json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-            //System.out.println(json); // keep commented out - for testing: possibility json is null here
-          } catch(FileNotFoundException ex) {
-            //System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
+            // System.out.println(json); // keep commented out - for testing: possibility
+            // json is null here
+          } catch (FileNotFoundException ex) {
+            // System.out.println("[DEBUG] query_pairs.get(\"query\"): "+
+            // query_pairs.get("query"));
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
             builder.append("The provided query is incorrect. Usage: /github?query=<query>\n");
             ex.printStackTrace();
-          } catch(Exception ex) {
-            System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
+          } catch (Exception ex) {
+            System.out.println("[DEBUG] query_pairs.get(\"query\"): " + query_pairs.get("query"));
             builder.append("HTTP/1.1 500 Internal Server Error\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
@@ -273,41 +282,51 @@ class WebServer {
           }
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
-          try {
-            // read the JSON file
-            JSONArray arr = new JSONArray(json);
-            //System.out.println(arr.toString(4));
-            // Start the payload of the sent HTTP packet
-            StringBuilder payload = new StringBuilder();
-            payload.append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
-            payload.append("<h1>Repository Details</h1>\n<ul>\n");
+          if (json.charAt(0) == '[') {
+            try {
+              // read the JSON file
+              JSONArray arr = new JSONArray(json);
+              // System.out.println(arr.toString(4));
+              // Start the payload of the sent HTTP packet
+              StringBuilder payload = new StringBuilder();
+              payload
+                  .append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
+              payload.append("<h1>Repository Details</h1>\n<ul>\n");
 
-            for(int i = 0; i < arr.length(); i++) {
-              JSONObject repo = arr.getJSONObject(i);
-              //System.out.println(repo);
-              String fullName = repo.get("full_name").toString();
-              int id = Integer.parseInt(repo.get("id").toString());
-              String login = repo.getJSONObject("owner").get("login").toString();
-              /*
-               * HTML will look something like:
-               * <li>\n<strong>Full Name: </strong> fullname
-               */
-              payload.append("<li>\n<strong>Full Name:</strong> ").append(fullName)
-              .append("<br>\n<strong>ID:</strong> ").append(id)
-              .append("<br>\n<strong>Login:</strong> ").append(login)
-              .append("\n</li>\n");
+              for (int i = 0; i < arr.length(); i++) {
+                JSONObject repo = arr.getJSONObject(i);
+                // System.out.println(repo);
+                String fullName = repo.get("full_name").toString();
+                int id = Integer.parseInt(repo.get("id").toString());
+                String login = repo.getJSONObject("owner").get("login").toString();
+                /*
+                 * HTML will look something like:
+                 * <li>\n<strong>Full Name: </strong> fullname
+                 */
+                payload.append("<li>\n<strong>Full Name:</strong> ").append(fullName)
+                    .append("<br>\n<strong>ID:</strong> ").append(id)
+                    .append("<br>\n<strong>Login:</strong> ").append(login)
+                    .append("\n</li>\n\n");
+              }
+              System.out.println("parsed information: " + payload);
+              // send data to client
+              builder.append("HTTP/1.1 200 OK\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n\n");
+              builder.append(payload + "\n");
+            } catch (NullPointerException ex) {
+              // bad coding practice here, maybe
+              // we don't really need to do anything since if json is null, one of those
+              // catch blocks would have aleady sent the HTTP packet with some error code
+              // just making sure the program doesn't crash because of it
+              ex.printStackTrace();
             }
-            System.out.println("parsed information: " + payload);
-            // send data to client 
-            builder.append("HTTP/1.1 200 OK\n");
-            builder.append("Content-Type: text/html; charset=utf-8\n\n");
-            builder.append(payload + "\n");
-          } catch(NullPointerException ex) {
-            // bad coding practice here, maybe
-            // we don't really need to do anything since if json is null, one of those
-            // catch blocks would have aleady sent the HTTP packet
-            // just making sure the program doesn't crash because of it
-            ex.printStackTrace();
+          } else {
+            // json sent was not an array; wrong query made:
+            // no instructions given for any other JSON parsing, so im just erroring out:
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Only supported JSON parsing is through queries that return arrays.");
           }
 
         } else {
@@ -332,6 +351,7 @@ class WebServer {
 
   /**
    * Method to read in a query and split it up correctly
+   * 
    * @param query parameters on path
    * @return Map of all parameters and their specific values
    * @throws UnsupportedEncodingException If the URLs aren't encoded with UTF-8
@@ -352,6 +372,7 @@ class WebServer {
 
   /**
    * Builds an HTML file list from the www directory
+   * 
    * @return HTML string output of file list
    */
   public static String buildFileList() {
@@ -412,29 +433,31 @@ class WebServer {
     URLConnection conn = null;
     InputStreamReader in = null;
     /*
-     * Changing this so that I can handle the excpetions under the if(github?) section of the code
-     * That's the only place this code is used anyway. I will handle it all there so I can deal with
+     * Changing this so that I can handle the excpetions under the if(github?)
+     * section of the code
+     * That's the only place this code is used anyway. I will handle it all there so
+     * I can deal with
      * the server not crashing
      */
     // where old try block was
-      URL url = new URL(aUrl);
-      conn = url.openConnection();
-      if (conn != null)
-        conn.setReadTimeout(20 * 1000); // timeout in 20 seconds
-      if (conn != null && conn.getInputStream() != null) {
-        in = new InputStreamReader(conn.getInputStream(), Charset.defaultCharset());
-        BufferedReader br = new BufferedReader(in);
-        if (br != null) {
-          int ch;
-          // read the next character until end of reader
-          while ((ch = br.read()) != -1) {
-            sb.append((char) ch);
-          }
-          br.close();
+    URL url = new URL(aUrl);
+    conn = url.openConnection();
+    if (conn != null)
+      conn.setReadTimeout(20 * 1000); // timeout in 20 seconds
+    if (conn != null && conn.getInputStream() != null) {
+      in = new InputStreamReader(conn.getInputStream(), Charset.defaultCharset());
+      BufferedReader br = new BufferedReader(in);
+      if (br != null) {
+        int ch;
+        // read the next character until end of reader
+        while ((ch = br.read()) != -1) {
+          sb.append((char) ch);
         }
+        br.close();
       }
-      // where old catch block was
-      in.close();
+    }
+    // where old catch block was
+    in.close();
     return sb.toString();
   }
 }
