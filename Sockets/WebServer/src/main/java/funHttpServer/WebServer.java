@@ -282,7 +282,7 @@ class WebServer {
           }
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
-          if (json.charAt(0) == '[' || query_pairs.get("query").charAt(0) == 'u') { // check that it is an array and query is for user repo
+          if ((json.charAt(0) == '[' || query_pairs.get("query").charAt(0) == 'u') && json != null) { // check that it is an array and query is for user repo
             try {
               // read the JSON file
               JSONArray arr = new JSONArray(json);
