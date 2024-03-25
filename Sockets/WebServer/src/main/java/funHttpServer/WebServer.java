@@ -284,6 +284,7 @@ class WebServer {
 
             for(int i = 1; i < arr.length(); i++) {
               JSONObject repo = arr.getJSONObject(i);
+              System.out.println(repo);
               String fullName = repo.getString("full_name");
               int id = repo.getInt("id");
               String login = repo.getJSONObject("owner").getString("full_name");
