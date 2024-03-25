@@ -349,6 +349,7 @@ class WebServer {
 
             // outsourcing to another API here:
             String names = fetchURL("https://api.api-ninjas.com/v1/babynames?gender=" + gender + "&popular?=" + popular);
+            System.out.println(names);
             JSONArray nameArr = new JSONArray(names);
             Random rand = new Random();
             int idx = nameArr.length() == 0 ? 0 : rand.nextInt(nameArr.length() - 1);
@@ -365,15 +366,14 @@ class WebServer {
             builder.append("\n");
             builder.append("Please ensure passed parameters are valid integers.");
           } catch(IOException ex) {
-
+            ex.printStackTrace();
           } catch(Exception ex) {
-
+            ex.printStackTrace();
           }
-          // TODO: get popular baby names for that year
         
         } else {
           // if the request is not recognized at all
-
+          builder.setLength(0); // just in case
           builder.append("HTTP/1.1 400 Bad Request\n");
           builder.append("Content-Type: text/html; charset=utf-8\n");
           builder.append("\n");
