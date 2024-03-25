@@ -350,6 +350,8 @@ class WebServer {
             URL url = new URL("https://api.api-ninjas.com/v1/babynames?gender=" + gender + "&popular=" + popular);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("accept", "application/json"); // get response in JSON
+            // yeah this should not be plain text
+            // the account I made for this API service has no link to me and I used a temporary email, it really doesn't matter
             connection.setRequestProperty("X-Api-Key", "6hRqZUW/yaIDJXj682eV4g==JPA1Q4RVcBPDLjiV");
             connection.setRequestMethod("GET");
             connection.connect();
@@ -371,9 +373,10 @@ class WebServer {
               builder.append("HTTP/1.1 200 OK");
               builder.append("Content-Type: text/html; charset=utf-8\n");
               builder.append(nameArr.getString(idx)); // returned array will have 10 names: 0-9
+              System.out.println(nameArr.getString(idx));
             } else {
               System.out.println(connection.getResponseCode());
-              builder.append("HTTP/1.1 200 OK");
+              builder.append("HTTP/1.1 501 Internal Server Error");
               builder.append("Content-Type: text/html; charset=utf-8\n");
               builder.append("Something went wrong :(((");
             }
