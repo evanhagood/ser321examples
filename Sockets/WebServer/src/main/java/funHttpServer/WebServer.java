@@ -278,7 +278,7 @@ class WebServer {
             JSONObject obj = new JSONObject(json);
             String fullName = obj.getString("full_name");
             int id = obj.getInt("id");
-            String login = obj.getJSONArray("owner").getString(0); // login is idx 0
+            String login = obj.getJSONObject("owner").getString("login");
             // send data to client -- idk how to use HTML
             builder.append("HTTP/1.1 200 OK\r\n");
             builder.append("Content-Type: text/html; charset=utf-8\r\n");
