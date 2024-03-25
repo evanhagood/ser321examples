@@ -282,7 +282,7 @@ class WebServer {
           }
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
-          if (json.charAt(0) == '[') {
+          if (json.charAt(0) == '[' || query_pairs.get("query").charAt(0) == 'u') { // check that it is an array and query is for user repo
             try {
               // read the JSON file
               JSONArray arr = new JSONArray(json);
@@ -291,7 +291,7 @@ class WebServer {
               StringBuilder payload = new StringBuilder();
               payload
                   .append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
-              payload.append("<h1>Repository Details</h1>\n<ul>\n<ul>");
+              payload.append("<h1>Repository details:</h1>\n<ul>\n<ul>");
 
               for (int i = 0; i < arr.length(); i++) {
                 JSONObject repo = arr.getJSONObject(i);
@@ -303,6 +303,7 @@ class WebServer {
                  * HTML will look something like:
                  * <li>\n<strong>Full Name: </strong> fullname
                  */
+                // TODO: add spacing between the bullet points
                 payload.append("<li>\n<strong>Full Name:</strong> ").append(fullName)
                     .append("<br>\n<strong>ID:</strong> ").append(id)
                     .append("<br>\n<strong>Login:</strong> ").append(login)
