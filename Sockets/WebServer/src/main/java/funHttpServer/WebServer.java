@@ -371,7 +371,7 @@ class WebServer {
               int idx = nameArr.length() == 0 ? 0 : rand.nextInt(nameArr.length() - 1);
   
               builder.append("HTTP/1.1 200 OK\n");
-              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n\n");
               builder.append(nameArr.getString(idx)); // returned array will have 10 names: 0-9
               System.out.println(nameArr.getString(idx));
             } else {
