@@ -257,7 +257,7 @@ class WebServer {
             json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
             //System.out.println(json); // keep commented out - for testing: possibility json is null here
           } catch(FileNotFoundException ex) {
-            System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
+            //System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
             builder.append("\n");
@@ -292,15 +292,16 @@ class WebServer {
                * HTML will look something like:
                * <li>\n<strong>Full Name: </strong> fullname
                */
-              payload.append("<li>\n<strong>Full Name:</strong> ").append(fullName)
-              .append("<br>\n<strong>ID:</strong> ").append(id)
-              .append("<br>\n<strong>Login:</strong> ").append(login)
-              .append("\n</li>\n");
+              // payload.append("<li>\n<strong>Full Name:</strong> ").append(fullName)
+              // .append("<br>\n<strong>ID:</strong> ").append(id)
+              // .append("<br>\n<strong>Login:</strong> ").append(login)
+              // .append("\n</li>\n");
             }
             // send data to client 
             builder.append("HTTP/1.1 200 OK\r\n");
             builder.append("Content-Type: text/html; charset=utf-8\r\n");
-            builder.append(payload);
+            builder.append("I hope this works");
+            //builder.append(payload);
 
           } catch(NullPointerException ex) {
             // bad coding practice here, maybe
