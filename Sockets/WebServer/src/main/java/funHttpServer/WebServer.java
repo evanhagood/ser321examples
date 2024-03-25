@@ -338,8 +338,7 @@ class WebServer {
             }
 
           }
-
-        } if(request.contains("babynames?")) {
+        } else if(request.contains("babynames?")) {
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("babynames?", ""));
 
