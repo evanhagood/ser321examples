@@ -222,8 +222,7 @@ class WebServer {
             // this method will still overflow if the passed integers multiply to something
             // > Integer.MAX_VALUE
             // I'm not gonna change the code to use something like BigInteger, though that's
-            // probably what I'd do if this were
-            // a real server.
+            // probably what I'd do if this were a real server
           } catch (NumberFormatException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
@@ -309,10 +308,10 @@ class WebServer {
                     .append("<br>\n<strong>Login:</strong> ").append(login)
                     .append("\n</li>\n\n");
               }
-              System.out.println("parsed information: " + payload);
+              //System.out.println("parsed information: " + payload);
               // send data to client
               builder.append("HTTP/1.1 200 OK\n");
-              builder.append("Content-Type: text/html; charset=utf-8\n\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
               builder.append(payload + "</ul>");
             } catch (NullPointerException ex) {
               // bad coding practice here, maybe
@@ -320,6 +319,12 @@ class WebServer {
               // catch blocks would have aleady sent the HTTP packet with some error code
               // just making sure the program doesn't crash because of it
               ex.printStackTrace();
+            } catch(JSONException ex) {
+              builder.setLength(0); // clear anything that might have been added to the builder before the exception
+              // send a not supported :
+              builder.append("HTTP/1.1 501 Not Implemented");
+              builder.append("Content-Type: text/html; charset=utf-8\n");
+              builder.append("Any request other than users/<user>/repos is not supported.");
             }
           } else {
             // json sent was not an array; wrong query made:
@@ -334,6 +339,38 @@ class WebServer {
 
           }
 
+        } if(request.contains("babynames?")) {
+          Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+          query_pairs = splitQuery(request.replace("babynames?", ""));
+
+          try {
+            boolean popular = Boolean.parseBoolean(query_pairs.get("popular"));
+            String gender = query_pairs.get("gender");
+
+            // outsourcing to another API here:
+            String names = fetchURL("https://api.api-ninjas.com/v1/babynames?gender=" + gender + "&popular?=" + popular);
+            JSONArray nameArr = new JSONArray(names);
+            Random rand = new Random();
+            int idx = nameArr.length() == 0 ? 0 : rand.nextInt(nameArr.length() - 1);
+
+            builder.append("HTTP/1.1 200 OK");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append(nameArr.getString(idx)); // returned array will have 10 names: 0-9
+            
+
+        
+          } catch(NumberFormatException ex) {
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n");
+            builder.append("\n");
+            builder.append("Please ensure passed parameters are valid integers.");
+          } catch(IOException ex) {
+
+          } catch(Exception ex) {
+
+          }
+          // TODO: get popular baby names for that year
+        
         } else {
           // if the request is not recognized at all
 
@@ -433,7 +470,7 @@ class WebServer {
    * @return the String result of the http request.
    *
    **/
-  public String fetchURL(String aUrl) throws Exception {
+  public String fetchURL(String aUrl) throws IOException {
     StringBuilder sb = new StringBuilder();
     URLConnection conn = null;
     InputStreamReader in = null;
