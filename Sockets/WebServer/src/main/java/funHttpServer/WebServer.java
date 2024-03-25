@@ -299,11 +299,9 @@ class WebServer {
             }
             System.out.println("parsed information: " + payload);
             // send data to client 
-            builder.append("HTTP/1.1 200 OK\r\n");
-            builder.append("Content-Type: text/html; charset=utf-8\n");
-            builder.append("I hope this works\n");
-            //builder.append(payload);
-
+            builder.append("HTTP/1.1 200 OK\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n\n");
+            builder.append(payload + "\n");
           } catch(NullPointerException ex) {
             // bad coding practice here, maybe
             // we don't really need to do anything since if json is null, one of those
