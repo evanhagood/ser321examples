@@ -276,7 +276,7 @@ class WebServer {
           try {
             // read the JSON file
             JSONArray arr = new JSONArray(json);
-            //System.out.println(arr);
+            System.out.println(arr.toString(4));
             // Start the payload of the sent HTTP packet
             StringBuilder payload = new StringBuilder();
             payload.append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
