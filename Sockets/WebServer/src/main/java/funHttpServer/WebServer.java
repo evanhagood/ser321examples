@@ -25,6 +25,7 @@ import java.util.Random;
 import java.util.Map;
 import java.util.LinkedHashMap;
 import java.nio.charset.Charset;
+import org.json.*;
 
 class WebServer {
   public static void main(String args[]) {
@@ -251,15 +252,10 @@ class WebServer {
 
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
           query_pairs = splitQuery(request.replace("github?", ""));
+          String json = null;
           try {
-            String json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-            System.out.println(json);
-
-            // only append the OK request if its ok (aka no exception was thrown above):
-            builder.append("HTTP/1.1 200 OK\n");
-            builder.append("Content-Type: text/html; charset=utf-8\n");
-            builder.append("\n");
-            builder.append("Check the todos mentioned in the Java source file");
+            json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
+            //System.out.println(json);
           } catch(FileNotFoundException ex) {
             System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
             builder.append("HTTP/1.1 400 Bad Request\n");
@@ -277,7 +273,30 @@ class WebServer {
           }
           // TODO: Parse the JSON returned by your fetch and create an appropriate
           // response based on what the assignment document asks for
-          //JSONObject obj = new JSONObject();
+          try {
+            // read the JSON file
+            JSONObject obj = new JSONObject(json);
+            String fullName = obj.getString("full_name");
+            int id = obj.getInt("id");
+            String login = obj.getJSONArray("owner").getString(0); // login is idx 0
+            // send data to client -- idk how to use HTML
+            builder.append("HTTP/1.1 200 OK\r\n");
+            builder.append("Content-Type: text/html; charset=utf-8\r\n");
+            builder.append("\r\n");
+            builder.append("<html><body>");
+            builder.append("<h1>Data Retrieved</h1>");
+            builder.append("<p>Full Name: ").append(fullName).append("</p>");
+            builder.append("<p>ID: ").append(id).append("</p>");
+            builder.append("<p>Login: ").append(login).append("</p>");
+            builder.append("</body></html>");
+
+          } catch(NullPointerException ex) {
+            // bad coding practice here, maybe
+            // we don't really need to do anything since if json is null, one of those
+            // catch blocks would have aleady sent the HTTP packet
+            // just making sure the program doesn't crash because of it
+            ex.printStackTrace();
+          }
 
         } else {
           // if the request is not recognized at all
