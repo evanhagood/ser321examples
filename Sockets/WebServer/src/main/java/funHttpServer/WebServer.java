@@ -255,7 +255,7 @@ class WebServer {
           String json = null;
           try {
             json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-            //System.out.println(json);
+            System.out.println(json); // keep commented out - for testing: possibility json is null here
           } catch(FileNotFoundException ex) {
             System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
             builder.append("HTTP/1.1 400 Bad Request\n");
