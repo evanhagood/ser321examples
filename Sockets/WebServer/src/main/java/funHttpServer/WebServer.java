@@ -287,7 +287,7 @@ class WebServer {
               //System.out.println(repo);
               String fullName = repo.get("full_name").toString();
               int id = Integer.parseInt(repo.get("id").toString());
-              String login = repo.getJSONObject("owner").get("owner").toString();
+              String login = repo.getJSONObject("owner").get("login").toString();
               /*
                * HTML will look something like:
                * <li>\n<strong>Full Name: </strong> fullname
