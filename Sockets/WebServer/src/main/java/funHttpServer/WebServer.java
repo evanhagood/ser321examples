@@ -284,7 +284,7 @@ class WebServer {
             builder.append("Content-Type: text/html; charset=utf-8\r\n");
             builder.append("\r\n");
             builder.append("<html><body>");
-            builder.append("<h1>Data Retrieved</h1>");
+            builder.append("<h1>Data Retrieved from "+ "api.github.com/"+query_pairs.get("query") + "</h1>");
             builder.append("<p>Full Name: ").append(fullName).append("</p>");
             builder.append("<p>ID: ").append(id).append("</p>");
             builder.append("<p>Login: ").append(login).append("</p>");
