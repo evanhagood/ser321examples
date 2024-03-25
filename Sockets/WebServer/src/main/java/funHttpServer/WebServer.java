@@ -281,7 +281,7 @@ class WebServer {
             payload.append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
             payload.append("<h1>Repository Details</h1>\n<ul>\n");
 
-            for(int i = 0; i < arr.length(); i++) {
+            for(int i = 1; i < arr.length(); i++) {
               JSONObject repo = arr.getJSONObject(i);
               String fullName = repo.getString("full_name");
               int id = repo.getInt("id");
