@@ -275,20 +275,30 @@ class WebServer {
           // response based on what the assignment document asks for
           try {
             // read the JSON file
-            JSONObject obj = new JSONObject(json);
-            String fullName = obj.getString("full_name");
-            int id = obj.getInt("id");
-            String login = obj.getJSONObject("owner").getString("login");
-            // send data to client -- idk how to use HTML
+            JSONArray arr = new JSONArray(json);
+            // Start the payload of the sent HTTP packet
+            StringBuilder payload = new StringBuilder();
+            payload.append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
+            payload.append("<h1>Repository Details</h1>\n<ul>\n");
+
+            for(int i = 0; i < arr.length(); i++) {
+              JSONObject repo = arr.getJSONObject(i);
+              String fullName = repo.getString("full_name");
+              int id = repo.getInt("id");
+              String login = repo.getJSONObject("owner").getString("full_name");
+              /*
+               * HTML will look something like:
+               * <li>\n<strong>Full Name: </strong> fullname
+               */
+              payload.append("<li>\n<strong>Full Name:</strong> ").append(fullName)
+              .append("<br>\n<strong>ID:</strong> ").append(id)
+              .append("<br>\n<strong>Login:</strong> ").append(login)
+              .append("\n</li>\n");
+            }
+            // send data to client 
             builder.append("HTTP/1.1 200 OK\r\n");
             builder.append("Content-Type: text/html; charset=utf-8\r\n");
-            builder.append("\r\n");
-            builder.append("<html><body>");
-            builder.append("<h1>Data Retrieved from "+ "api.github.com/"+query_pairs.get("query") + "</h1>");
-            builder.append("<p>Full Name: ").append(fullName).append("</p>");
-            builder.append("<p>ID: ").append(id).append("</p>");
-            builder.append("<p>Login: ").append(login).append("</p>");
-            builder.append("</body></html>");
+            builder.append(payload);
 
           } catch(NullPointerException ex) {
             // bad coding practice here, maybe
