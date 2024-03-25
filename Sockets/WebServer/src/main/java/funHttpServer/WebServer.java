@@ -348,7 +348,7 @@ class WebServer {
             String gender = query_pairs.get("gender");
 
             // outsourcing to another API here: not using fethURL for auth
-            URL url = new URL("https://api.api-ninjas.com/v1/babynames?gender=" + gender + "&popular?=" + popular);
+            URL url = new URL("https://api.api-ninjas.com/v1/babynames?gender=" + gender + "&popular=" + popular);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("accept", "application/json"); // get response in JSON
             connection.setRequestProperty("Authorization", "Bearer 6hRqZUW/yaIDJXj682eV4g==JPA1Q4RVcBPDLjiV");
