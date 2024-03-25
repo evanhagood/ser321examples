@@ -365,7 +365,7 @@ class WebServer {
               }
               bufferedReader.close();
               System.out.println(names);
-              JSONArray nameArr = new JSONArray(names);
+              JSONArray nameArr = new JSONArray(names.toString());
               Random rand = new Random();
               int idx = nameArr.length() == 0 ? 0 : rand.nextInt(nameArr.length() - 1);
   
