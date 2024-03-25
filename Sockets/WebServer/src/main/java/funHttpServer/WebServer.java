@@ -292,11 +292,12 @@ class WebServer {
                * HTML will look something like:
                * <li>\n<strong>Full Name: </strong> fullname
                */
-              // payload.append("<li>\n<strong>Full Name:</strong> ").append(fullName)
-              // .append("<br>\n<strong>ID:</strong> ").append(id)
-              // .append("<br>\n<strong>Login:</strong> ").append(login)
-              // .append("\n</li>\n");
+              payload.append("<li>\n<strong>Full Name:</strong> ").append(fullName)
+              .append("<br>\n<strong>ID:</strong> ").append(id)
+              .append("<br>\n<strong>Login:</strong> ").append(login)
+              .append("\n</li>\n");
             }
+            System.out.println("parsed information: " + payload);
             // send data to client 
             builder.append("HTTP/1.1 200 OK\r\n");
             builder.append("Content-Type: text/html; charset=utf-8\n");
