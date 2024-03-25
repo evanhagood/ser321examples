@@ -347,8 +347,26 @@ class WebServer {
             boolean popular = Boolean.parseBoolean(query_pairs.get("popular"));
             String gender = query_pairs.get("gender");
 
-            // outsourcing to another API here:
-            String names = fetchURL("https://api.api-ninjas.com/v1/babynames?gender=" + gender + "&popular?=" + popular);
+            // outsourcing to another API here: not using fethURL for auth
+            URL url = new URL("https://api.api-ninjas.com/v1/babynames?gender=" + gender + "&popular?=" + popular);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("accept", "application/json"); // get response in JSON
+            connection.setRequestProperty("Authorization", "Bearer 6hRqZUW/yaIDJXj682eV4g==JPA1Q4RVcBPDLjiV");
+            connection.setRequestMethod("GET");
+            connection.connect();
+            StringBuilder names = null;
+            if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+              InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+              BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+              names = new StringBuilder();
+              String line;
+              while ((line = bufferedReader.readLine()) != null) {
+                names.append(line);
+              }
+              bufferedReader.close();
+            } else {
+
+            }
             System.out.println(names);
             JSONArray nameArr = new JSONArray(names);
             Random rand = new Random();
