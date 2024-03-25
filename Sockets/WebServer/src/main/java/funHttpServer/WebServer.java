@@ -255,7 +255,7 @@ class WebServer {
           String json = null;
           try {
             json = fetchURL("https://api.github.com/" + query_pairs.get("query"));
-            System.out.println(json); // keep commented out - for testing: possibility json is null here
+            //System.out.println(json); // keep commented out - for testing: possibility json is null here
           } catch(FileNotFoundException ex) {
             System.out.println("[DEBUG] query_pairs.get(\"query\"): "+ query_pairs.get("query"));
             builder.append("HTTP/1.1 400 Bad Request\n");
@@ -276,6 +276,7 @@ class WebServer {
           try {
             // read the JSON file
             JSONArray arr = new JSONArray(json);
+            System.out.println(arr);
             // Start the payload of the sent HTTP packet
             StringBuilder payload = new StringBuilder();
             payload.append("<!DOCTYPE html>\n<html>\n<head>\n<title>Repository Information</title>\n</head>\n<body>\n");
