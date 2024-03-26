@@ -472,10 +472,23 @@ class WebServer {
             builder.setLength(0);
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n\n");
-            builder.append("Please ensure passed parameters are valid:");
-            builder.append("amount -> valid integer\n");
-            builder.append(" || source -> valid currency code");
-            builder.append(" || target -> valid currency code");
+            builder.append("<!DOCTYPE html>\n")
+                  .append("<html lang=\"en\">\n")
+                  .append("<head>\n")
+                  .append("    <meta charset=\"UTF-8\">\n")
+                  .append("    <title>Error: Invalid Arguments</title>")
+                  .append("</head>\n")
+                  .append("<body>\n")
+                  .append("    <h2>Error: Invalid Parameters</h2>\n")
+                  .append("    <p>Please ensure the passed parameters are valid:</p>\n")
+                  .append("    <ul>\n")
+                  .append("        <li><strong>amount</strong> - a valid integer</li>\n")
+                  .append("        <li><strong>source</strong> - a valid currency code</li>\n")
+                  .append("        <li><strong>target</strong> - a valid currency code</li>\n")
+                  .append("    </ul>\n")
+                  .append("    <p>This site uses the free version of a currency converter API. Some currencies are not available, you may need to try different currencies.</p>\n")
+                  .append("</body>\n")
+                  .append("</html>");
           }
 
         }else {
