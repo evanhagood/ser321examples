@@ -347,7 +347,16 @@ class WebServer {
             boolean popular = Boolean.parseBoolean(query_pairs.get("popular"));
             String gender = query_pairs.get("gender");
 
-            if(!gender.equalsIgnoreCase("boy") && !gender.equalsIgnoreCase("girl")) {
+            /*
+             * if the key popular is not found, aka user mistyped the query:
+             *    .get() will return null and parseBoolean will return false
+             * if the key gender does not exist:
+             *    .get() will also return null and gender will just be null.
+             * 
+             * So we need some custom checks here since no exception will directly be thrown
+             */
+
+            if(gender == null || (!gender.equalsIgnoreCase("boy") && !gender.equalsIgnoreCase("girl"))) {
               throw new IllegalArgumentException(); // just go to catch block, no real logging here
             }
 
