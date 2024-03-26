@@ -449,7 +449,7 @@ class WebServer {
               }
               bufferedReader.close();
               System.out.println(exchange_rate);
-              JSONObject returned = new JSONObject(exchange_rate);
+              JSONObject returned = new JSONObject(exchange_rate.toString());
               System.out.println(returned);
               double rate = returned.getDouble("exchange_rate");
 
