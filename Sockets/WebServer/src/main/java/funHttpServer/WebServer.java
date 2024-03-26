@@ -347,9 +347,7 @@ class WebServer {
             boolean popular = Boolean.parseBoolean(query_pairs.get("popular"));
             String gender = query_pairs.get("gender");
 
-            if(!gender.equalsIgnoreCase("boy") || !gender.equalsIgnoreCase("girl")) {
-              System.out.println("WHAT THE FUCK IS GOING ON");
-              System.out.println(gender);
+            if(!gender.equalsIgnoreCase("boy") && !gender.equalsIgnoreCase("girl")) {
               throw new IllegalArgumentException(); // just go to catch block, no real logging here
             }
 
