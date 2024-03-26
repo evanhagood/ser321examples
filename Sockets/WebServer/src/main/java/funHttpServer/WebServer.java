@@ -451,7 +451,7 @@ class WebServer {
               System.out.println(exchange_rate);
 
               JSONObject returned = new JSONObject(exchange_rate);
-              double rate = Double.parseDouble(returned.getString("exchange_rate"));
+              double rate = returned.getDouble("exchange_rate");
 
               // we still have to do the math ourselves:
               double result = amountToConvert * rate;
