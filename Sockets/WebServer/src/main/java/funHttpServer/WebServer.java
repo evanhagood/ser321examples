@@ -411,7 +411,7 @@ class WebServer {
         
         } else if(request.contains("convertcurrency?")){
           Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-          query_pairs = splitQuery(request.replace("babynames?", ""));
+          query_pairs = splitQuery(request.replace("convertcurrency?", ""));
 
           try {
             System.out.println("amount: " + query_pairs.get("amount"));
