@@ -426,7 +426,7 @@ class WebServer {
             String pair = sourceCurrency + "_" + targetCurrency;
             System.out.println("pair: " + pair);
             // outsourcing the information here again:
-            URL url = new URL("https://api.api-ninjas.com/v1/exchangerate?="+pair);
+            URL url = new URL("https://api.api-ninjas.com/v1/exchangerate?pair="+pair);
             System.out.println(url);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("accept", "application/json"); // get response in JSON
