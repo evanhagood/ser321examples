@@ -450,9 +450,9 @@ class WebServer {
             builder.append("HTTP/1.1 400 Bad Request\n");
             builder.append("Content-Type: text/html; charset=utf-8\n\n");
             builder.append("Please ensure passed parameters are valid:");
-            builder.append("\tamount -> valid integer\n");
-            builder.append("\tsource -> valid currency code");
-            builder.append("\ttarget -> valid currency code");
+            builder.append("amount -> valid integer\n");
+            builder.append(" || source -> valid currency code");
+            builder.append(" || target -> valid currency code");
           }
 
         }else {
