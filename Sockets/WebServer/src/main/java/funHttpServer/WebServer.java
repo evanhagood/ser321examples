@@ -343,8 +343,13 @@ class WebServer {
           query_pairs = splitQuery(request.replace("babynames?", ""));
 
           try {
+            // parseBoolean() will return false on anything other than == true, so this input does not need to be validated
             boolean popular = Boolean.parseBoolean(query_pairs.get("popular"));
             String gender = query_pairs.get("gender");
+
+            if(!gender.equalsIgnoreCase("boy") || !gender.equalsIgnoreCase("girl")) {
+              throw new IllegalArgumentException(); // just go to catch block, no real logging here
+            }
 
             // outsourcing to another API here: not using fethURL for auth
             URL url = new URL("https://api.api-ninjas.com/v1/babynames?gender=" + gender + "&popular=" + popular);
@@ -377,15 +382,14 @@ class WebServer {
             } else {
               System.out.println(connection.getResponseCode());
               builder.append("HTTP/1.1 501 Internal Server Error");
-              builder.append("Content-Type: text/html; charset=utf-8\n");
-              builder.append("Something went wrong :(((");
+              builder.append("Content-Type: text/html; charset=utf-8\n\n");
+              builder.append("Something went wrong with NinjaAPI's services.");
             }
         
-          } catch(NumberFormatException ex) {
+          } catch(IllegalArgumentException ex) {
             builder.append("HTTP/1.1 400 Bad Request\n");
-            builder.append("Content-Type: text/html; charset=utf-8\n");
-            builder.append("\n");
-            builder.append("Please ensure passed parameters are valid integers.");
+            builder.append("Content-Type: text/html; charset=utf-8\n\n");
+            builder.append("Please ensure passed parameters are valid: gender -> boy or girl, popular -> true or false.");
           } catch(IOException ex) {
             ex.printStackTrace();
           } catch(Exception ex) {
