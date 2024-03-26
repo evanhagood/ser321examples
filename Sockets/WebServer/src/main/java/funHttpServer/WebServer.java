@@ -458,7 +458,7 @@ class WebServer {
 
               builder.append("HTTP/1.1 200 OK\n");
               builder.append("Content-Type: text/html; charset=utf-8\n\n");
-              builder.append(result);
+              builder.append(amountToConvert + " " + sourceCurrency + " is " + result + " " + targetCurrency);
 
             } else if(connection.getResponseCode() == HttpURLConnection.HTTP_BAD_REQUEST) {
               throw new IllegalArgumentException();
