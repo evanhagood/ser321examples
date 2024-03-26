@@ -354,6 +354,9 @@ class WebServer {
              *    .get() will also return null and gender will just be null.
              * 
              * So we need some custom checks here since no exception will directly be thrown
+             * 
+             * In essence, it almost doesn't matter what the user puts for popular or its value.
+             * It will either be correct, be true, and evaluate to true, or evaluate to false, whether the query is correct or not.
              */
 
             if(gender == null || (!gender.equalsIgnoreCase("boy") && !gender.equalsIgnoreCase("girl"))) {
@@ -406,7 +409,52 @@ class WebServer {
             ex.printStackTrace();
           }
         
-        } else {
+        } else if(request.contains("convertcurrency?")){
+          Map<String, String> query_pairs = new LinkedHashMap<String, String>();
+          query_pairs = splitQuery(request.replace("babynames?", ""));
+
+          try {
+            int amountToConvert = Integer.parseInt(query_pairs.get("amount"));
+            String sourceCurrency = query_pairs.get("souce");
+            String targetCurrency = query_pairs.get("target");
+            if(sourceCurrency == null || targetCurrency == null) {
+              throw new IllegalArgumentException(); // go to catch block
+            }
+
+            // calculate the rate
+            String pair = sourceCurrency + "_" + targetCurrency;
+            // outsourcing the information here again:
+            URL url = new URL("https://api.api-ninjas.com/v1/exchangerate?"+pair);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("accept", "application/json"); // get response in JSON
+            // yeah this should not be plain text
+            // the account I made for this API service has no link to me and I used a temporary email, it really doesn't matter
+            connection.setRequestProperty("X-Api-Key", "6hRqZUW/yaIDJXj682eV4g==JPA1Q4RVcBPDLjiV");
+            connection.setRequestMethod("GET");
+            connection.connect();
+            System.out.println(connection.getResponseCode());
+
+            if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+              // parse returned JSON
+            } else if(connection.getResponseCode() == HttpURLConnection.HTTP_BAD_REQUEST) {
+              throw new IllegalArgumentException();
+            }
+
+          } catch(NumberFormatException ex) {
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n\n");
+            builder.append("Please ensure amount is a valid integer.");
+          } catch(IllegalArgumentException ex) {
+            builder.setLength(0);
+            builder.append("HTTP/1.1 400 Bad Request\n");
+            builder.append("Content-Type: text/html; charset=utf-8\n\n");
+            builder.append("Please ensure passed parameters are valid:");
+            builder.append("\tamount -> valid integer\n");
+            builder.append("\tsource -> valid currency code");
+            builder.append("\ttarget -> valid currency code");
+          }
+
+        }else {
           // if the request is not recognized at all
           //builder.setLength(0); // just in case
           builder.append("HTTP/1.1 400 Bad Request\n");
