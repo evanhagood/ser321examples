@@ -414,6 +414,7 @@ class WebServer {
           query_pairs = splitQuery(request.replace("babynames?", ""));
 
           try {
+            System.out.println("amount: " + query_pairs.get("amount"));
             int amountToConvert = Integer.parseInt(query_pairs.get("amount"));
             String sourceCurrency = query_pairs.get("souce");
             String targetCurrency = query_pairs.get("target");
