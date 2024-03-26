@@ -1,17 +1,28 @@
 <html>
-	<head>
-		<link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
-	</head>
-	<body>
-		<h3>You can make the following GET requests<h3>
-		<ul>
-			<li>/file/sample.html -- returns the content of the file sample.html</li>
-			<li>/json -- returns a json of the /random request</a></li>
-			<li>/random -- returns index.html</a></li>
-			<li>/github -- parses and returns information about the specified query. Only works for users/USERNAME/repos.</li>
-			<li>/babynames -- returns a random baby names based on parameters: gender -> boy or girl, popular -> true or false</li>
-		</ul>
-		<h3>File Structure in www (you can use /file/www/FILENAME):</h3>
-		${links}
-	</body>
+    <head>
+        <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    </head>
+    <body>
+        <h3>You can make the following GET requests</h3>
+        <ul>
+            <li>/file/sample.html -- returns the content of the file sample.html</li>
+            <li>/json -- returns a json of the /random request</li>
+            <li>/random -- returns index.html</li>
+            <li>/github -- parses and returns information about the specified query. Only works for users/USERNAME/repos.</li>
+            <li>
+                /babynames -- returns a random baby name based on parameters: gender -> boy or girl, popular -> true or false
+                <ul>
+                    <li>Example: /babynames?gender=girl&popular=true</li>
+                </ul>
+            </li>
+            <li>
+                /currencyconverter -- takes an amount, source currency, and a target currency. Returns the conversion.
+                <ul>
+                    <li>Example: /currencyconverter?amount=100&source=USD&target=EUR</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>File Structure in www (you can use /file/www/FILENAME):</h3>
+        ${links}
+    </body>
 </html>
