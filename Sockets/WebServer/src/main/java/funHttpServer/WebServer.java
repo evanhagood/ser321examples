@@ -416,7 +416,7 @@ class WebServer {
           try {
             System.out.println("amount: " + query_pairs.get("amount"));
             int amountToConvert = Integer.parseInt(query_pairs.get("amount"));
-            String sourceCurrency = query_pairs.get("souce");
+            String sourceCurrency = query_pairs.get("source");
             String targetCurrency = query_pairs.get("target");
             if(sourceCurrency == null || targetCurrency == null) {
               throw new IllegalArgumentException(); // go to catch block
