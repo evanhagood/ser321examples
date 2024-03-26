@@ -427,7 +427,7 @@ class WebServer {
             System.out.println("pair: " + pair);
             // outsourcing the information here again:
             URL url = new URL("https://api.api-ninjas.com/v1/exchangerate?pair="+pair);
-            System.out.println(url);
+            //System.out.println(url);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("accept", "application/json"); // get response in JSON
             // yeah this should not be plain text
@@ -435,10 +435,31 @@ class WebServer {
             connection.setRequestProperty("X-Api-Key", "6hRqZUW/yaIDJXj682eV4g==JPA1Q4RVcBPDLjiV");
             connection.setRequestMethod("GET");
             connection.connect();
-            System.out.println(connection.getResponseCode());
-
+            //System.out.println(connection.getResponseCode());
+            
+            StringBuilder exchange_rate = null;
             if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
               // parse returned JSON
+              InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream());
+              BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+              exchange_rate= new StringBuilder();
+              String line;
+              while ((line = bufferedReader.readLine()) != null) {
+                exchange_rate.append(line);
+              }
+              bufferedReader.close();
+              System.out.println(exchange_rate);
+
+              JSONObject returned = new JSONObject(exchange_rate);
+              double rate = Double.parseDouble(returned.getString("exchange_rate"));
+
+              // we still have to do the math ourselves:
+              double result = amountToConvert * rate;
+
+              builder.append("HTTP/1.1 200 OK\n");
+              builder.append("Content-Type: text/html; charset=utf-8\n\n");
+              builder.append(result);
+
             } else if(connection.getResponseCode() == HttpURLConnection.HTTP_BAD_REQUEST) {
               throw new IllegalArgumentException();
             }
