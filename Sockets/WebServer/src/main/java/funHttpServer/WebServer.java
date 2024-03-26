@@ -427,6 +427,7 @@ class WebServer {
             System.out.println("pair: " + pair);
             // outsourcing the information here again:
             URL url = new URL("https://api.api-ninjas.com/v1/exchangerate?="+pair);
+            System.out.println(url);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestProperty("accept", "application/json"); // get response in JSON
             // yeah this should not be plain text
