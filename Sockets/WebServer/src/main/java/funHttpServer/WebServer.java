@@ -348,6 +348,7 @@ class WebServer {
             String gender = query_pairs.get("gender");
 
             if(!gender.equalsIgnoreCase("boy") || !gender.equalsIgnoreCase("girl")) {
+              System.out.println("WHAT THE FUCK IS GOING ON");
               throw new IllegalArgumentException(); // just go to catch block, no real logging here
             }
 
